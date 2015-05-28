@@ -24,6 +24,8 @@ use Croogo\Menus\Model\Table\LinksTable;
  */
 class LinksController extends CroogoAppController {
 
+	use \Crud\Controller\ControllerTrait;
+
 /**
  * beforeFilter
  *
@@ -39,20 +41,16 @@ class LinksController extends CroogoAppController {
 	public function initialize() {
 		parent::initialize();
 
-		$this->loadComponent('Croogo/Core.BulkProcess');
+		$this->loadComponent('Crud.Crud', [
+			'actions' => [
+				'toggle' => [
+					'className' => 'Crud.Bulk/Toggle',
+					'field' => 'status',
+				]
+			]
+		]);
+		$this->loadComponent('Croogo/Croogo.BulkProcess');
 		$this->loadModel('Croogo/Users.Roles');
-	}
-
-
-	/**
- * Toggle Link status
- *
- * @param $id string Link id
- * @param $status integer Current Link status
- * @return void
- */
-	public function toggle($id = null, $status = null) {
-		$this->Croogo->fieldToggle($this->Links, $id, $status);
 	}
 
 /**
